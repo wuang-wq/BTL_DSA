@@ -66,24 +66,67 @@ void change(const BigNumber& other)
     add_zero(sz);
 }
 //Thực hienj phép cộng
-    BigNumber operator+( BigNumber& other) const {
+//     BigNumber operator+( BigNumber& other) const {
+//     BigNumber result;
+//     reverse(other.digits.begin(), other.digits.end());
+//     // Tìm độ dài lớn nhất giữa hai số.
+//     int sz = max(digits.size(), other.digits.size());
+
+//     // Tạo bản sao của this và other để thay đổi độ dài mà không ảnh hưởng đến đối tượng gốc.
+//     BigNumber a_copy = *this;
+//     BigNumber b_copy = other;
+
+    
+//     // Đảm bảo cả hai số có cùng độ dài bằng cách thêm số 0 vào đầu.
+//     a_copy.add_zero(sz); 
+//     b_copy.add_zero(sz); 
+
+//     // Thực hiện phép cộng từng chữ số.
+//     int carry = 0;
+//     for (int i = sz-1; i >=0; i--) {
+//         int sum = a_copy.digits[i] + b_copy.digits[i] + carry;
+//         result.digits.push_back(sum % 10);
+//         carry = sum / 10;
+//     }
+
+//     // Nếu còn dư, thêm nó vào kết quả.
+//     if (carry) {
+//         result.digits.push_back(carry);
+//     }
+//     reverse(result.digits.begin(), result.digits.end());
+
+//     result.del_zero();
+//     //tách các chữ số
+//     // for(int digit : result.digits){
+//     //        cout << digit << " ";
+//     //     }
+//     return result;
+// }
+
+
+
+
+
+
+
+    BigNumber operator+( BigNumber& other)  {
     BigNumber result;
-    reverse(other.digits.begin(), other.digits.end());
+    
     // Tìm độ dài lớn nhất giữa hai số.
     int sz = max(digits.size(), other.digits.size());
-
+    reverse(digits.begin(), digits.end());
+    reverse(other.digits.begin(), other.digits.end());
     // Tạo bản sao của this và other để thay đổi độ dài mà không ảnh hưởng đến đối tượng gốc.
     BigNumber a_copy = *this;
     BigNumber b_copy = other;
 
-    
     // Đảm bảo cả hai số có cùng độ dài bằng cách thêm số 0 vào đầu.
-    a_copy.add_zero(sz); 
-    b_copy.add_zero(sz); 
+    a_copy.add_zero(sz);
+    b_copy.add_zero(sz);
 
     // Thực hiện phép cộng từng chữ số.
     int carry = 0;
-    for (int i = sz-1; i >=0; i--) {
+    for (int i = 0; i < sz; ++i) {
         int sum = a_copy.digits[i] + b_copy.digits[i] + carry;
         result.digits.push_back(sum % 10);
         carry = sum / 10;
@@ -93,24 +136,25 @@ void change(const BigNumber& other)
     if (carry) {
         result.digits.push_back(carry);
     }
-// 876987
-// 6576
-    
 
-    reverse(result.digits.begin(), result.digits.end());
-
-    result.del_zero();
-    //tách các chữ số
-    // for(int digit : result.digits){
-    //        cout << digit << " ";
-    //     }
     return result;
 }
 
+
+
+
+
+
+
+
+
+
+
 //Thực hienj phép trừ
-    BigNumber operator-( BigNumber& other) const {
+    BigNumber operator-( BigNumber& other)  {
     BigNumber result;
-    reverse(other.digits.begin(), other.digits.end());
+    // reverse(digits.begin(), digits.end());
+    // reverse(other.digits.begin(), other.digits.end());
     // Tìm độ dài lớn nhất giữa hai số.
     int sz = max(digits.size(), other.digits.size());
 
@@ -142,9 +186,7 @@ void change(const BigNumber& other)
     if (carry) {
         result.digits.push_back(carry);
     }
-// 876987
-// 6576
-    
+
 
     reverse(result.digits.begin(), result.digits.end());
 
@@ -158,17 +200,17 @@ void change(const BigNumber& other)
 
     BigNumber operator*( BigNumber& other)  {
         BigNumber result;
-        result.digits.resize(digits.size() + other.digits.size() , 0);
+        result.digits.resize(digits.size() + other.digits.size() +1);
 
         // cout <<"Sz ban dau:  " << result.digits.size() << endl;
 
 
         reverse(digits.begin(), digits.end());
-        // reverse(other.digits.begin(), other.digits.end());
+        reverse(other.digits.begin(), other.digits.end());
 
 
-        for (int i = 0; i < digits.size(); ++i) {
-            for (int j = 0; j < other.digits.size(); ++j) {
+        for (int i = 0; i<digits.size(); i++) {
+            for (int j = 0; j < other.digits.size() ; j++) {
                 result.digits[i + j] += (digits[i] * other.digits[j]);
                 // cout << "KQ dc them tai: " << i << " va " << j << " la:  " <<  result.digits[i+j] << endl;
                 result.digits[i + j + 1] += (result.digits[i + j] / 10);
@@ -179,6 +221,7 @@ void change(const BigNumber& other)
         for (int i = 0; i < result.digits.size() - 1; ++i) {
             result.digits[i + 1] += (result.digits[i] / 10);
             result.digits[i] %= 10;
+            // cout<<result.digits[i]<<endl;
         }
 
         while (result.digits.size() > 1 && result.digits.back() == 0) {
@@ -200,19 +243,19 @@ int main() {
     cin >> a;
     cout << "Nhap so nguyen lon b: ";
     cin >> b;
-
     cout << "Nhap so nguyen n: ";
     cin >> n;
-    BigNumber n_as_bigNumber = to_string(n);
-    // Nhân số lớn a và số nhỏ n. Chuyển n qua số lớn để nhân.
-    BigNumber product = a * n_as_bigNumber;
-    cout << "KQ nhan mot so lon voi 1 so nho: " << product << endl;
-
-    cout <<"KQ nhan mot so lon voi mot so lon: " << a * b << endl;
-        
+    
+cout <<"KQ nhan mot so lon voi mot so lon: " << a * b << endl;
     cout << "KQ tong mot so lon voi mot so lon: " << a+b << endl;
 
     cout << "KQ hieu mot so lon voi mot so lon: " << a-b << endl;
+
+    BigNumber n_as_bigNumber = to_string(n);
+    // Nhân số lớn a và số nhỏ n. Chuyển n qua số lớn để nhân.
+    BigNumber product = a * n_as_bigNumber;
+    cout << "KQ nhan mot so lon voi 1 so nho: " << product << endl;    
+
 
     return 0;
 }
